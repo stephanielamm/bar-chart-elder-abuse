@@ -5,7 +5,7 @@
 	<style>
 
 	.axis {
-	  font: 10px sans-serif;
+	  font: 14px sans-serif;
 	}
 
 	.axis path,
@@ -24,9 +24,9 @@
 
 <script>
 
-var margin = {top: 20, right: 20, bottom: 70, left: 40},
-    width = 600 - margin.left - margin.right,
-    height = 300 - margin.top - margin.bottom;
+var margin = {top: 40, right: 40, bottom: 70, left: 40},
+    width = 900 - margin.left - margin.right,
+    height = 600 - margin.top - margin.bottom;
 
 // Parse the date / time
 var	parseDate = d3.time.format("%Y-%m").parse;
@@ -68,9 +68,9 @@ d3.csv("data.csv", function(error, data) {
       .call(xAxis)
     .selectAll("text")
       .style("text-anchor", "end")
-      .attr("dx", "-.8em")
-      .attr("dy", "-.55em")
-      .attr("transform", "rotate(-90)" );
+      .attr("dx", "-.80em")
+      .attr("dy", ".95em")
+    //  .attr("transform", "rotate(-90)" );
 
   svg.append("g")
       .attr("class", "y axis")
@@ -78,7 +78,7 @@ d3.csv("data.csv", function(error, data) {
     .append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", 6)
-      .attr("dy", ".71em")
+      .attr("dy", ".90em")
       .style("text-anchor", "end")
       .text("Cases");
 
