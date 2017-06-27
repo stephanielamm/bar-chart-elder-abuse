@@ -117,14 +117,13 @@ d3.csv("data.csv", function(error, data) {
       .attr("dx", ".71em")
 			.attr("dy", ".95em")
 
-	/* source text. Will be added in methode.
 	svg.append("text")
 	        .attr("x", -5 )
 	        .attr("y", 560 )
 	        .style("text-anchor", "left")
 					.style("font-size", 11)
 	        .text("Source: The Georgia Bureau of Investigations. Graphic by Stephanie Lamm/The Atlanta Journal-Constitution.");
-*/
+
   svg.append("g")
       .attr("class", "y axis")
       .call(yAxis)
@@ -148,14 +147,13 @@ d3.csv("data.csv", function(error, data) {
 
 });
 
-/* title text. will be added in methode.
 svg.append("text")
         .attr("x", (width / 2))
         .attr("y", 0 - (margin.top / 2))
         .attr("text-anchor", "middle")
         .style("font-size", "18px")
         .style("text-decoration", "underline")
-        .text("Charges filed for abuse, neglect and exploitation of at-risk adults in Georgia"); */
+        .text("Charges filed for abuse, neglect and exploitation of at-risk adults in Georgia");
 </script>
 
 </body>
