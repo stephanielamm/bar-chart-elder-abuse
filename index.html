@@ -2,10 +2,9 @@
 <meta charset="utf-8">
 
 <head>
-<link href="https://www.fontify.me/wf/043ed861d7a8301076eda8c5b51ce7e7" rel="stylesheet" type="text/css">
 	<style>
 body {
-  font-family: font121048;
+  font-family: arial;
 }
 .axis {
 	  font: 12px;
@@ -27,9 +26,9 @@ rect {
   line-height: 1;
   font-weight: bold;
   padding: 12px;
-  background: rgba(0, 0, 0, 0.8);
+  background: white;
   color: #fff;
-  border-radius: 2px;
+  border-radius: 4px;
 }
 /* Creates a small triangle extender for the tooltip. Code from http://bl.ocks.org/Caged/6476579 */
 .d3-tip:after {
@@ -38,7 +37,7 @@ rect {
   font-size: 10px;
   width: 100%;
   line-height: 1;
-  color: rgba(0, 0, 0, 0.8);
+  color: white;
   content: "\25BC";
   position: absolute;
   text-align: center;
@@ -61,14 +60,14 @@ rect {
 
 <script>
 
-var margin = {top: 120, right: 20, bottom: 80, left: 60},
+var margin = {top: 120, right: 50, bottom: 80, left: 60},
     width = 700 - margin.left - margin.right,
     height = 700 - margin.top - margin.bottom;
 
 // Parse the date / time
 var	parseDate = d3.time.format("%Y-%m").parse;
 
-var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
+var x = d3.scale.ordinal().rangeRoundBands([0, width], .1);
 
 var y = d3.scale.linear().range([height, 0]);
 
@@ -86,7 +85,7 @@ var tip = d3.tip()
 		 .attr('class', 'd3-tip')
 		 .offset([-10, 0])
 		 .html(function(d) {
-		   return "<strong>Criminal Charges: </strong> <span style='color:#bf653c'>" + d.value + "</span>";
+		   return "<span style='color:#333333'><strong>Criminal charges: </strong></span><span style='color:#bf653c'>" + d.value + "</span>";
 		 })
 
 var svg = d3.select("body").append("svg")
@@ -116,15 +115,16 @@ d3.csv("data.csv", function(error, data) {
     .selectAll("text")
       .style("text-anchor", "end")
       .attr("dx", ".71em")
-      .attr("dy", ".95em")
+			.attr("dy", ".95em")
 
-			svg.append("text")      // text label for the x axis
-			        .attr("x", 0 )
-			        .attr("y", 560 )
-			        .style("text-anchor", "left")
-							.style("font-size", 11)
-			        .text("Data from the Georgia Bureau of Investigations. Graphic by Stephanie Lamm/The Atlanta Journal-Constitution.");
-
+	/* source text. Will be added in methode.
+	svg.append("text")
+	        .attr("x", -5 )
+	        .attr("y", 560 )
+	        .style("text-anchor", "left")
+					.style("font-size", 11)
+	        .text("Source: The Georgia Bureau of Investigations. Graphic by Stephanie Lamm/The Atlanta Journal-Constitution.");
+*/
   svg.append("g")
       .attr("class", "y axis")
       .call(yAxis)
@@ -138,7 +138,6 @@ d3.csv("data.csv", function(error, data) {
   svg.selectAll("bar")
       .data(data)
     .enter().append("rect")
-    //  .style("fill", "steelblue")
       .attr("x", function(d) { return x(d.date); })
       .attr("width", x.rangeBand())
       .attr("y", function(d) { return y(d.value); })
@@ -149,27 +148,14 @@ d3.csv("data.csv", function(error, data) {
 
 });
 
+/* title text. will be added in methode.
 svg.append("text")
         .attr("x", (width / 2))
         .attr("y", 0 - (margin.top / 2))
         .attr("text-anchor", "middle")
-        .style("font-size", "16px")
+        .style("font-size", "18px")
         .style("text-decoration", "underline")
-        .text("Charges filed for at-risk adult abuse, negligence and exploitation in Georgia");
- /*svg.append("text")
-		// .attr("x", (width / 2))
-		 .attr("y", (width / 2))
-		 .attr("x", 0 - (margin.bottom / 2))
-		 .attr("text-anchor", "left")
-		// .attr("transform", "translate("+ (width/2) +","+(height-(padding/3))+")")  // centre below axis
-	   .style("font-size", "9px")
-		 .text("Data from the Georgia Bureau of Investigations. Graphic by Stephanie Lamm/The Atlanta Journal-Constitution.");
-/*
-		 svg.append("text")
-            .attr("text-anchor", "left")
-            .attr("transform", "translate("+ (width/2) +","+(height-(padding/3))+")")  // centre below axis
-            .text("Data from the Georgia Bureau of Investigations. Graphic by Stephanie Lamm/The Atlanta Journal-Constitution.");
-*/
+        .text("Charges filed for abuse, neglect and exploitation of at-risk adults in Georgia"); */
 </script>
 
 </body>
