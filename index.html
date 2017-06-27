@@ -61,7 +61,7 @@ rect {
 
 <script>
 
-var margin = {top: 40, right: 20, bottom: 30, left: 60},
+var margin = {top: 60, right: 20, bottom: 60, left: 60},
     width = 700 - margin.left - margin.right,
     height = 700 - margin.top - margin.bottom;
 
@@ -118,7 +118,12 @@ d3.csv("data.csv", function(error, data) {
       .attr("dx", ".71em")
       .attr("dy", ".95em")
 
-    //  .attr("transform", "rotate(-90)" );
+			svg.append("text")      // text label for the x axis
+			        .attr("x", 0 )
+			        .attr("y", 630 )
+			        .style("text-anchor", "left")
+							.style("font-size", 11)
+			        .text("Data from the Georgia Bureau of Investigations. Graphic by Stephanie Lamm/The Atlanta Journal-Constitution.");
 
   svg.append("g")
       .attr("class", "y axis")
@@ -151,7 +156,7 @@ svg.append("text")
         .style("font-size", "16px")
         .style("text-decoration", "underline")
         .text("Charges filed for at-risk adult abuse, negligence and exploitation in Georgia");
- svg.append("text")
+ /*svg.append("text")
 		// .attr("x", (width / 2))
 		 .attr("y", (width / 2))
 		 .attr("x", 0 - (margin.bottom / 2))
