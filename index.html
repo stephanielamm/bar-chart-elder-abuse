@@ -2,18 +2,53 @@
 <meta charset="utf-8">
 
 <head>
+<link href="https://www.fontify.me/wf/043ed861d7a8301076eda8c5b51ce7e7" rel="stylesheet" type="text/css">
 	<style>
-
-	.axis {
-	  font: 14px sans-serif;
-	}
-
-	.axis path,
-	.axis line {
+body {
+  font-family: font121048;
+}
+.axis {
+	  font: 12px;
+}
+.axis path,
+.axis line {
 	  fill: none;
 	  stroke: #000;
-	  shape-rendering: crispEdges;
-	}
+	  shape-rendering: auto;
+}
+/* Bar colors */
+rect:hover {
+  fill: #bf653c ;
+}
+rect {
+	fill: #304968;
+}
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+/* Creates a small triangle extender for the tooltip. Code from http://bl.ocks.org/Caged/6476579 */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+/* Style northward tooltips differently. From http://bl.ocks.org/Caged/6476579 */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
 
 	</style>
 </head>
@@ -21,12 +56,14 @@
 <body>
 
 <script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+
 
 <script>
 
-var margin = {top: 40, right: 40, bottom: 70, left: 40},
-    width = 900 - margin.left - margin.right,
-    height = 600 - margin.top - margin.bottom;
+var margin = {top: 40, right: 20, bottom: 30, left: 60},
+    width = 700 - margin.left - margin.right,
+    height = 700 - margin.top - margin.bottom;
 
 // Parse the date / time
 var	parseDate = d3.time.format("%Y-%m").parse;
@@ -45,12 +82,20 @@ var yAxis = d3.svg.axis()
     .orient("left")
     .ticks(10);
 
+var tip = d3.tip()
+		 .attr('class', 'd3-tip')
+		 .offset([-10, 0])
+		 .html(function(d) {
+		   return "<strong>Criminal Charges: </strong> <span style='color:#bf653c'>" + d.value + "</span>";
+		 })
+
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
+svg.call(tip);
 
 d3.csv("data.csv", function(error, data) {
 
@@ -66,10 +111,13 @@ d3.csv("data.csv", function(error, data) {
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
       .call(xAxis)
+
+
     .selectAll("text")
       .style("text-anchor", "end")
-      .attr("dx", "-.80em")
+      .attr("dx", ".71em")
       .attr("dy", ".95em")
+
     //  .attr("transform", "rotate(-90)" );
 
   svg.append("g")
@@ -78,21 +126,45 @@ d3.csv("data.csv", function(error, data) {
     .append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", 6)
-      .attr("dy", ".90em")
+      .attr("dy", ".71em")
       .style("text-anchor", "end")
-      .text("Cases");
+      .text("Charges");
 
   svg.selectAll("bar")
       .data(data)
     .enter().append("rect")
-      .style("fill", "steelblue")
+    //  .style("fill", "steelblue")
       .attr("x", function(d) { return x(d.date); })
       .attr("width", x.rangeBand())
       .attr("y", function(d) { return y(d.value); })
-      .attr("height", function(d) { return height - y(d.value); });
+      .attr("height", function(d) { return height - y(d.value); })
+			.on('mouseover', tip.show)
+		  .on('mouseout', tip.hide)
+		 ;
 
 });
 
+svg.append("text")
+        .attr("x", (width / 2))
+        .attr("y", 0 - (margin.top / 2))
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .style("text-decoration", "underline")
+        .text("Charges filed for at-risk adult abuse, negligence and exploitation in Georgia");
+ svg.append("text")
+		// .attr("x", (width / 2))
+		 .attr("y", (width / 2))
+		 .attr("x", 0 - (margin.bottom / 2))
+		 .attr("text-anchor", "left")
+		// .attr("transform", "translate("+ (width/2) +","+(height-(padding/3))+")")  // centre below axis
+	   .style("font-size", "9px")
+		 .text("Data from the Georgia Bureau of Investigations. Graphic by Stephanie Lamm/The Atlanta Journal-Constitution.");
+/*
+		 svg.append("text")
+            .attr("text-anchor", "left")
+            .attr("transform", "translate("+ (width/2) +","+(height-(padding/3))+")")  // centre below axis
+            .text("Data from the Georgia Bureau of Investigations. Graphic by Stephanie Lamm/The Atlanta Journal-Constitution.");
+*/
 </script>
 
 </body>
