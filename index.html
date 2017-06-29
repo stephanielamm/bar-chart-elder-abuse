@@ -54,15 +54,17 @@ rect {
 
 <body>
 
-<script src="http://d3js.org/d3.v3.min.js"></script>
-<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script src="d3.tip.v0.6.3.js"></script>
 <script type="text/javascript" src="//pym.nprapps.org/pym.v1.min.js"></script>
-
+	 <div class="svg-container" id="svgholder"></div>
 <script>
 
-var margin = {top: 120, right: 50, bottom: 80, left: 60},
-    width = 700 - margin.left - margin.right,
-    height = 700 - margin.top - margin.bottom;
+var pymChild = new pym.Child({});
+
+var margin = {top: 45, right: 50, bottom: 40, left: 60},
+    width = 515 - margin.left - margin.right,
+    height = 475 - margin.top - margin.bottom;
 
 // Parse the date / time
 var	parseDate = d3.time.format("%Y-%m").parse;
@@ -83,28 +85,41 @@ var yAxis = d3.svg.axis()
 
 var tip = d3.tip()
 		 .attr('class', 'd3-tip')
-		 .offset([-10, 0])
+		 .offset(function(){
+
+			 var result = [-10, 0];
+			 return result;
+		 })
 		 .html(function(d) {
 		   return "<span style='color:#333333'><strong>Criminal charges: </strong></span><span style='color:#bf653c'>" + d.value + "</span>";
 		 })
 
-var svg = d3.select("body").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+var svg = d3.select("#svgholder").append("svg")
+	//responsive SVG needs these 2 attributes and no width and height attr
+	.attr("preserveAspectRatio", "xMinYMin meet")
+	.attr("viewBox", "0 0 "+(+width+margin.right+margin.left)+" "+(+height+margin.top+margin.bottom))
+	//class to make it responsive
+	.classed("svg-content-responsive", true)
+    //.attr("width", width + margin.left + margin.right)
+    //.attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
+
+
 svg.call(tip);
 
-d3.csv("data.csv", function(error, data) {
+d3.csv("data.csv", drawChart);
+
+function drawChart(error, data) {
 
     data.forEach(function(d) {
         d.date = parseDate(d.date);
         d.value = +d.value;
     });
 
-  x.domain(data.map(function(d) { return d.date; }));
-  y.domain([0, d3.max(data, function(d) { return d.value; })]);
+x.domain(data.map(function(d) { return d.date; }));
+y.domain([0, d3.max(data, function(d) { return d.value; })]);
 
   svg.append("g")
       .attr("class", "x axis")
@@ -125,6 +140,8 @@ d3.csv("data.csv", function(error, data) {
 					.style("font-size", 11)
 	        .text("Source: The Georgia Bureau of Investigations. Graphic by Stephanie Lamm/The Atlanta Journal-Constitution.");
 */
+
+
   svg.append("g")
       .attr("class", "y axis")
       .call(yAxis)
@@ -146,7 +163,9 @@ d3.csv("data.csv", function(error, data) {
 		  .on('mouseout', tip.hide)
 		 ;
 
-});
+	pymChild.sendHeight();
+
+}
 
 /* title text. will be added in methode.
 svg.append("text")
